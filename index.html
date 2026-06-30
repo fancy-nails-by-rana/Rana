@@ -724,12 +724,20 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwbW2ehfetd5-
       updateAvailableTimes();
       return;
     }
-const booking = { name, phone, service, date, time, duration };
 
-navigator.sendBeacon(
-  GOOGLE_SCRIPT_URL,
-  new Blob([JSON.stringify(booking)], { type: 'text/plain' })
-);
+   const booking = { name, phone, service, date, time, duration };
+   
+const bookingUrl =
+  GOOGLE_SCRIPT_URL +
+  "?action=book" +
+  "&date=" + encodeURIComponent(date) +
+  "&time=" + encodeURIComponent(time) +
+  "&name=" + encodeURIComponent(name) +
+  "&phone=" + encodeURIComponent(phone) +
+  "&service=" + encodeURIComponent(service) +
+  "&duration=" + encodeURIComponent(duration);
+
+new Image().src = bookingUrl;
 
 bookings.push(booking);
 saveBookings(bookings);
