@@ -630,7 +630,7 @@
     const m = String(minutes % 60).padStart(2, '0');
     return `${h}:${m}`;
   }
-
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwbW2ehfetd5-hAr4lY22N87lXhmSuN1eKa2h7ALhUakxSqTEPqsEJFH7JMI1zTB8LSgQ/exec";
   function getBookings() {
     return JSON.parse(localStorage.getItem('ranaBookings') || '[]');
   }
@@ -724,18 +724,27 @@
       updateAvailableTimes();
       return;
     }
+const booking = { name, phone, service, date, time, duration };
 
-    const booking = { name, phone, service, date, time, duration };
-    bookings.push(booking);
-    saveBookings(bookings);
-    renderTodaySchedule();
-    updateAvailableTimes();
+fetch(GOOGLE_SCRIPT_URL, {
+  method: 'POST',
+  mode: 'no-cors',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(booking)
+});
 
-    const d = new Date(date + 'T00:00:00');
-    const formatted = d.toLocaleDateString('en-EG', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+bookings.push(booking);
+saveBookings(bookings);
+renderTodaySchedule();
+updateAvailableTimes();
 
-    const message = `Hello Rana, I would like to book an appointment.%0A%0AName: ${encodeURIComponent(name)}%0APhone: ${encodeURIComponent(phone)}%0AService: ${encodeURIComponent(service)}%0ADate: ${encodeURIComponent(formatted)}%0ATime: ${encodeURIComponent(time)}`;
-    window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
+const d = new Date(date + 'T00:00:00');
+const formatted = d.toLocaleDateString('en-EG', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+const message = `Hello Rana, I would like to book an appointment.%0A%0AName: ${encodeURIComponent(name)}%0APhone: ${encodeURIComponent(phone)}%0AService: ${encodeURIComponent(service)}%0ADate: ${encodeURIComponent(formatted)}%0ATime: ${encodeURIComponent(time)}`;
+window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
   }
 
   renderTodaySchedule();
