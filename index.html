@@ -726,10 +726,10 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwbW2ehfetd5-
     }
 const booking = { name, phone, service, date, time, duration };
 
-fetch(GOOGLE_SCRIPT_URL, {
-  method: 'POST',
-  body: JSON.stringify(booking)
-});
+navigator.sendBeacon(
+  GOOGLE_SCRIPT_URL,
+  new Blob([JSON.stringify(booking)], { type: 'text/plain' })
+);
 
 bookings.push(booking);
 saveBookings(bookings);
