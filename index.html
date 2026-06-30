@@ -613,6 +613,16 @@
   };
 
   const dateInput = document.getElementById('date');
+ dateInput.addEventListener('input', function () {
+  const selectedDate = new Date(this.value);
+  const day = selectedDate.getDay();
+
+  // الجمعة فقط = 5
+  if (day === 5) {
+    alert('Sorry, we are closed on Fridays.');
+    this.value = '';
+  }
+});
   const serviceInput = document.getElementById('service');
   const timeInput = document.getElementById('time');
   const today = new Date().toISOString().split('T')[0];
