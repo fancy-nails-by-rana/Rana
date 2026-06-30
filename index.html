@@ -737,7 +737,15 @@ const bookingUrl =
   "&service=" + encodeURIComponent(service) +
   "&duration=" + encodeURIComponent(duration);
 
-new Image().src = bookingUrl;
+const img = new Image();
+img.src = bookingUrl;
+   const d = new Date(date + 'T00:00:00');
+const formatted = d.toLocaleDateString('en-EG', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+const message = `Hello Rana, I would like to book an appointment.%0A%0AName: ${encodeURIComponent(name)}%0APhone: ${encodeURIComponent(phone)}%0AService: ${encodeURIComponent(service)}%0ADate: ${encodeURIComponent(formatted)}%0ATime: ${encodeURIComponent(time)}`;
+setTimeout(() => {
+  window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
+}, 1000);
 
 bookings.push(booking);
 saveBookings(bookings);
@@ -747,8 +755,6 @@ updateAvailableTimes();
 const d = new Date(date + 'T00:00:00');
 const formatted = d.toLocaleDateString('en-EG', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
 
-const message = `Hello Rana, I would like to book an appointment.%0A%0AName: ${encodeURIComponent(name)}%0APhone: ${encodeURIComponent(phone)}%0AService: ${encodeURIComponent(service)}%0ADate: ${encodeURIComponent(formatted)}%0ATime: ${encodeURIComponent(time)}`;
-window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
   }
 
   renderTodaySchedule();
